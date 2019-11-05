@@ -1,7 +1,7 @@
 /* ShortestPaths.java
    CSC 226 - Fall 2019
 
-   Vicky Nguyen - V00906571 - 4 Nov 2019
+   Vicky Nguyen - V00906571 - 5 Nov 2019
    
    This template includes some testing code to help verify the implementation.
    To interactively provide test inputs, run the program with
@@ -75,44 +75,48 @@ public class ShortestPaths {
 		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
 =======
 
+		// Reference:
 		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
 
 >>>>>>> just found bug in pq. Should check pq.contains(vertex)? remove, insert : insert
 		// Inittialize
-		init_dist();
+		dist = new int[n];
+		for (int i = 0; i < n; i++) {
+			dist[i] = Integer.MAX_VALUE;
+		}
 		parent = new int[n];
 		settled = new HashSet<Integer>();
-
 		pq = new IndexMinPQ<Integer>(n);
 		pq.insert(source, 0);
 		dist[source] = 0;
 		parent[source] = -1; // no parent
 
+		// Find shortest path
 		while (settled.size() != n) {
 			int u = pq.delMin();
 			settled.add(u);
-			e_Neighbours(u, adj);
+			GoToNeighbours(u, adj);
 		}
 
 	}
 
-	static void e_Neighbours(int u, int[][][] adj) {
+	static void GoToNeighbours(int u, int[][][] adj) {
 		int edgeDistance = -1;
 		int newDistance = -1;
 		for (int i = 0; i < adj[u].length; i++) {
 			int vertex = adj[u][i][0];
 			int cost = adj[u][i][1];
 
-			// If current node hasn't already been processed
+			// If the current vertex hasn't been settled
 			if (!settled.contains(vertex)) {
 				edgeDistance = cost;
 				newDistance = dist[u] + edgeDistance;
 
-				// If new distance is cheaper in cost
+				// If new distance is cheaper
 				if (newDistance < dist[vertex]) {
 					dist[vertex] = newDistance;
 
-					// remove vertex, check if vertex is in pq, then insert...
+					// update the cost to the current vertex
 					if (pq.contains(vertex)) {
 						pq.delete(vertex);
 					}
@@ -123,24 +127,17 @@ public class ShortestPaths {
 		}
 	}
 
-	static void init_dist() {
-		dist = new int[n];
-		for (int i = 0; i < n; i++) {
-			dist[i] = Integer.MAX_VALUE;
-		}
-	}
-
-	// to do
 	static void PrintPaths(int source) {
 		// TODO: Your code here
 		for (int i = 0; i < n; i++) {
 			String path = "" + i;
 			int cur_vertex = i;
 			while (parent[cur_vertex] != -1) {
-				path = parent[cur_vertex] + "->" + path;
+				path = parent[cur_vertex] + " --> " + path;
 				cur_vertex = parent[cur_vertex];
 			}
-			System.out.println(i + ": " + dist[i] + ", path: " + path);
+			System.out.println("The path from " + source + " to " + i + " is: " + path + " and the total distance is : "
+					+ dist[i]);
 		}
 	}
 
@@ -201,13 +198,13 @@ public class ShortestPaths {
 			}
 
 			// output the adjacency list representation of the graph
-			for (int i = 0; i < n; i++) {
-				System.out.print(i + ": ");
-				for (int j = 0; j < adj[i].length; j++) {
-					System.out.print("(" + adj[i][j][0] + ", " + adj[i][j][1] + ") ");
-				}
-				System.out.print("\n");
-			}
+			// for (int i = 0; i < n; i++) {
+			// System.out.print(i + ": ");
+			// for (int j = 0; j < adj[i].length; j++) {
+			// System.out.print("(" + adj[i][j][0] + ", " + adj[i][j][1] + ") ");
+			// }
+			// System.out.print("\n");
+			// }
 
 			long startTime = System.currentTimeMillis();
 
