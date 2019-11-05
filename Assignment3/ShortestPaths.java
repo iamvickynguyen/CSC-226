@@ -43,6 +43,7 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.*;
 
 //Do not change the name of the ShortestPaths class
 public class ShortestPaths {
@@ -50,8 +51,9 @@ public class ShortestPaths {
 	// TODO: Your code here
 	public static int n; // number of vertices
 	private static int dist[];
-	private static int path[][];
+	// private static int path[][]; TO DO...
 	private static IndexMinPQ<Integer> pq;
+	private static Set<Integer> settled;
 	/*
 	 * ShortestPaths(adj) Given an adjacency list for an undirected, weighted graph,
 	 * calculates and stores the shortest paths to all the vertices from the source
@@ -69,18 +71,54 @@ public class ShortestPaths {
 		n = adj.length;
 
 		// TODO: Your code here
+<<<<<<< HEAD
 		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
+=======
+
+		// https://www.baeldung.com/java-dijkstra
+		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
+
+>>>>>>> just found bug in pq. Should check pq.contains(vertex)? remove, insert : insert
 		// Inittialize
 		init_dist();
-		path = new int[n][n]; // check
+		settled = new HashSet<Integer>();
+
+		// path = new int[n][n]; // check
 		pq = new IndexMinPQ<Integer>(n);
 		pq.insert(source, 0);
 		dist[source] = 0;
 
-		for (int i = 0; i < n - 1; i++) {
-
+		while (settled.size() != n) {
+			int u = pq.delMin();
+			settled.add(u);
+			e_Neighbours(u, adj);
 		}
 
+	}
+
+	static void e_Neighbours(int u, int[][][] adj) {
+		int edgeDistance = -1;
+		int newDistance = -1;
+		for (int i = 0; i < adj[u].length; i++) {
+			int vertex = adj[u][i][0];
+			int cost = adj[u][i][1];
+
+			// If current node hasn't already been processed
+			if (!settled.contains(vertex)) {
+				edgeDistance = cost;
+				newDistance = dist[u] + edgeDistance;
+
+				// If new distance is cheaper in cost
+				if (newDistance < dist[vertex]) {
+					dist[vertex] = newDistance;
+
+					// remove vertex, check if vertex is in pq, then insert...
+					pq.insert(vertex, newDistance);
+				}
+
+				// pq.insert(vertex, cost);
+			}
+		}
 	}
 
 	static void init_dist() {
@@ -90,8 +128,12 @@ public class ShortestPaths {
 		}
 	}
 
+	// to do
 	static void PrintPaths(int source) {
 		// TODO: Your code here
+		for (int i = 0; i < n; i++) {
+			System.out.println(i + ": " + dist[i]);
+		}
 	}
 
 	/*
