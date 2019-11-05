@@ -51,7 +51,7 @@ public class ShortestPaths {
 	// TODO: Your code here
 	public static int n; // number of vertices
 	private static int dist[];
-	// private static int path[][]; TO DO...
+	private static int parent[];
 	private static IndexMinPQ<Integer> pq;
 	private static Set<Integer> settled;
 	/*
@@ -75,18 +75,18 @@ public class ShortestPaths {
 		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
 =======
 
-		// https://www.baeldung.com/java-dijkstra
 		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
 
 >>>>>>> just found bug in pq. Should check pq.contains(vertex)? remove, insert : insert
 		// Inittialize
 		init_dist();
+		parent = new int[n];
 		settled = new HashSet<Integer>();
 
-		// path = new int[n][n]; // check
 		pq = new IndexMinPQ<Integer>(n);
 		pq.insert(source, 0);
 		dist[source] = 0;
+		parent[source] = -1; // no parent
 
 		while (settled.size() != n) {
 			int u = pq.delMin();
@@ -113,10 +113,12 @@ public class ShortestPaths {
 					dist[vertex] = newDistance;
 
 					// remove vertex, check if vertex is in pq, then insert...
+					if (pq.contains(vertex)) {
+						pq.delete(vertex);
+					}
 					pq.insert(vertex, newDistance);
+					parent[vertex] = u;
 				}
-
-				// pq.insert(vertex, cost);
 			}
 		}
 	}
@@ -132,7 +134,13 @@ public class ShortestPaths {
 	static void PrintPaths(int source) {
 		// TODO: Your code here
 		for (int i = 0; i < n; i++) {
-			System.out.println(i + ": " + dist[i]);
+			String path = "" + i;
+			int cur_vertex = i;
+			while (parent[cur_vertex] != -1) {
+				path = parent[cur_vertex] + "->" + path;
+				cur_vertex = parent[cur_vertex];
+			}
+			System.out.println(i + ": " + dist[i] + ", path: " + path);
 		}
 	}
 
