@@ -71,14 +71,7 @@ public class ShortestPaths {
 		n = adj.length;
 
 		// TODO: Your code here
-<<<<<<< HEAD
 		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
-=======
-
-		// Reference:
-		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
-
->>>>>>> just found bug in pq. Should check pq.contains(vertex)? remove, insert : insert
 		// Inittialize
 		dist = new int[n];
 		for (int i = 0; i < n; i++) {
