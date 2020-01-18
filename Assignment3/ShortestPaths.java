@@ -71,7 +71,7 @@ public class ShortestPaths {
 		n = adj.length;
 
 		// TODO: Your code here
-		// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
+		// Reference: https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-in-java-using-priorityqueue/
 		// Inittialize
 		dist = new int[n];
 		for (int i = 0; i < n; i++) {
